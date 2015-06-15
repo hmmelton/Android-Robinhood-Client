@@ -156,7 +156,7 @@ public class RobinhoodApi {
     }
 
     public void placeOrder(JSONObject instrument, int quantity, double bidPrice, ) {
-        
+
     }
 
     public interface RobinhoodApiCallback<E> {
