@@ -155,8 +155,40 @@ public class RobinhoodApi {
         });
     }
 
-    public void placeOrder(JSONObject instrument, int quantity, double bidPrice, ) {
+    public void placeOrder(String instrument, int quantity, double bidPrice, String transaction) {
+        final String[] bid = new String[1];
 
+        if (bidPrice == 0.0) {
+            try {
+                JSONObject instrumentData = new JSONObject(instrument);
+                String symbol = instrumentData.getString("symbol");
+                quoteData(symbol, new RobinhoodApiCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            JSONObject quoteData = new JSONObject(result);
+                            bid[0] = quoteData.getString("bid_price");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        Log.e(TAG, throwable.toString());
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
+        } else {
+            bid[0] = bidPrice + "";
+        }
+
+        RequestParams params = new RequestParams();
+        //params.add("account", );
     }
 
     public interface RobinhoodApiCallback<E> {
