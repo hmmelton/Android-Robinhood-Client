@@ -48,11 +48,11 @@ public class RobinhoodApi {
             put("watchlists", "https://api.robinhood.com/watchlists/");
     }};
 
-    Context session;
+    private Context session;
 
-    String username;
-    String password;
-    String auth_token;
+    public static String username;
+    public static String password;
+    private String auth_token;
 
     public RobinhoodApi(Context context, String username, String password) {
         session = context;
@@ -71,14 +71,14 @@ public class RobinhoodApi {
         client.addHeader("User-Agent", "Robinhood/823 (iPhone; iOS 7.1.2; Scale/2.00)");
     }
 
-    public void login() {
+    public void login(final RobinhoodApiCallback<Integer> callback) {
         String data = String.format("password=%s&username=%s", password, username);
         try {
             HttpEntity entity = new StringEntity(data);
             client.post(session, endpoints.get("login"), entity, "application/json", new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    Log.e(TAG, responseString, throwable);
+                    callback.onFailure(throwable);
                 }
 
                 @Override
@@ -87,6 +87,7 @@ public class RobinhoodApi {
                         JSONObject jsonRes = new JSONObject(responseString);
                         auth_token = jsonRes.getString("token");
                         client.addHeader("Authorization", "Token " + auth_token);
+                        callback.onSuccess(statusCode);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
