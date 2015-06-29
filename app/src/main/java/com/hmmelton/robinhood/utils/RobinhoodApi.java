@@ -24,7 +24,7 @@ public class RobinhoodApi {
 
     private final String TAG = "RobinhoodApi";
 
-    private final AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+    public final static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
 
     HashMap<String, String> endpoints = new HashMap<String, String>(){{
             put("login", "https://api.robinhood.com/api-token-auth/");
@@ -71,7 +71,7 @@ public class RobinhoodApi {
         client.addHeader("User-Agent", "Robinhood/823 (iPhone; iOS 7.1.2; Scale/2.00)");
     }
 
-    public void login(final RobinhoodApiCallback<Integer> callback) {
+    public void login(final RobinhoodApiCallback<String> callback) {
         String data = String.format("password=%s&username=%s", password, username);
         try {
             HttpEntity entity = new StringEntity(data);
@@ -87,7 +87,7 @@ public class RobinhoodApi {
                         JSONObject jsonRes = new JSONObject(responseString);
                         auth_token = jsonRes.getString("token");
                         client.addHeader("Authorization", "Token " + auth_token);
-                        callback.onSuccess(statusCode);
+                        callback.onSuccess(auth_token);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

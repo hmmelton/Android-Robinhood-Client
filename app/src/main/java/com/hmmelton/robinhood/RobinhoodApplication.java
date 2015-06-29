@@ -19,6 +19,7 @@ public class RobinhoodApplication extends Application {
         super.onCreate();
 
         instance = this;
+        user = new User(instance);
     }
 
     public static RobinhoodApi getApi() {
@@ -31,10 +32,6 @@ public class RobinhoodApplication extends Application {
 
     public static User getUser() {
         return user;
-    }
-
-    public static void setUser() {
-        user = new User(api.username, api.password);
     }
 
     public static void initApi(String username, String password) {

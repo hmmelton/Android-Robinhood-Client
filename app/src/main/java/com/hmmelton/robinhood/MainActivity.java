@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hmmelton.robinhood.model.User;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -33,7 +35,7 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
 
         // check if user is logged in
-        if (RobinhoodApplication.getUser() == null) {
+        if (User.getAuthToken() == null) {
             startActivity(new Intent(this, LoginActivity.class));
         }
         setContentView(R.layout.activity_main);
@@ -135,8 +137,7 @@ public class MainActivity extends ActionBarActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+            return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
         @Override
